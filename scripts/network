@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+
+if [ $1 == "name" ]
+then
+	network=$(networksetup -getairportnetwork en0 | cut -c 24-)
+	echo "${network}"
+fi
+
+if [ $1 == "stats" ]
+then
+	upload=$(ifstat -i en0 1s 1 | awk 'NR==3 {print $2}')
+	download=$(ifstat -i en0 1s 1 | awk 'NR==3 {print $2}')
+
+	if which ifstat > /dev/null
+	then
+		echo "↓ ${download} ↑ ${upload}"
+	else
+		echo "${network}"
+	fi
+fi
